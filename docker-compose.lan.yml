@@ -1,8 +1,9 @@
-# Windows / 포트 충돌 시 로컬 확인용 (https 없이)
+# Windows: 80/443 이 이미 쓰일 때. tibo 만 8080 으로 엽니다.
+# 호스트 Caddy 가 있으면 reverse_proxy 127.0.0.1:8080
 # docker compose -f docker-compose.yml -f docker-compose.lan.yml up -d
 services:
   tibo:
     ports:
-      - "${HTTP_PORT:-8080}:80"
+      - "8080:80"
     labels:
       - com.centurylinklabs.watchtower.enable=true

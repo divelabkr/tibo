@@ -1,10 +1,6 @@
 # TIBO, PLS. — Windows PowerShell installer (belo.team)
-# 실행:
-#   irm https://raw.githubusercontent.com/divelabkr/tibo/main/install.ps1 | iex
-# 터널:
-#   irm https://raw.githubusercontent.com/divelabkr/tibo/main/install.ps1 | iex -TunnelToken '토큰'
 param(
-  [ValidateSet('http','caddy','prod')]
+  [ValidateSet('http','caddy','lan','prod')]
   [string]$Mode = 'caddy',
   [string]$Domain = 'belo.team',
   [string]$Email = 'admin@belo.team',
@@ -38,9 +34,7 @@ if (Test-Path (Join-Path $InstallDir '.git')) {
   git -C $InstallDir fetch --depth 1 origin main
   git -C $InstallDir reset --hard origin/main
 } else {
-  if (Test-Path $InstallDir) {
-    New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null
-  }
+  New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null
   git clone --depth 1 $RepoUrl $InstallDir
 }
 
@@ -58,6 +52,7 @@ CLOUDFLARE_TUNNEL_TOKEN=$TunnelToken
 $compose = @('compose', '--env-file', '.env', '-f', 'docker-compose.yml')
 switch ($Mode) {
   'http'  { $compose += @('-f', 'docker-compose.http.yml') }
+  'lan'   { $compose += @('-f', 'docker-compose.lan.yml') }
   'caddy' { $compose += @('-f', 'docker-compose.caddy.yml') }
   'prod'  {
     $compose += @('-f', 'docker-compose.caddy.yml')
@@ -70,10 +65,24 @@ if ($Mode -eq 'caddy' -and $TunnelToken) {
 
 Write-Host "Pulling images..."
 & docker @compose pull
+if ($LASTEXITCODE -ne 0) { Write-Error "docker pull failed ($LASTEXITCODE)" }
+
 Write-Host "Starting ($Mode) for $Domain ..."
 & docker @compose up -d --remove-orphans
+if ($LASTEXITCODE -ne 0) {
+  Write-Host ""
+  Write-Host "Caddy HTTPS 가 실패한 경우 대부분 Windows 에서 443 이 이미 사용 중입니다."
+  Write-Host "LAN 으로라도 띄우려면:"
+  Write-Host "  docker compose --env-file .env -f docker-compose.yml -f docker-compose.lan.yml up -d"
+  Write-Host "그다음 브라우저: http://localhost:8080"
+  Write-Error "docker compose up failed ($LASTEXITCODE)"
+}
 
 Write-Host ""
 Write-Host "TIBO is running on $Domain"
-Write-Host "Open https://$Domain"
+if ($Mode -eq 'lan') {
+  Write-Host "Open http://localhost:$HttpPort"
+} else {
+  Write-Host "Open https://$Domain"
+}
 Write-Host "설치 폴더: $InstallDir"

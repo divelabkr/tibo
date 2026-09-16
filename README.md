@@ -1,99 +1,61 @@
 # TIBO, PLS.
 
 > 리셋의 성인 · 비공식 팬아트 웹  
-> **PATRON SAINT OF ONE MORE RESET · SAINT TIBO**
+> **PATRON SAINT OF ONE MORE RESET · SAINT TIBO**  
+> 프로덕션: **https://belo.team**
 
-정적 프론트엔드 사이트입니다. (서버 저장 없음, 로컬 데모)
+정적 프론트엔드 사이트입니다. (서버 저장 없음)
 
-## 서버에 한 번에 설치
+## 프로덕션 (belo.team)
 
-PC를 서버로 쓰는 경우, 저장소의 `install.sh` 한 줄이면 Docker + 컨테이너 + 자동 업데이트가 뜹니다.
+서버 PC에서:
 
 ```bash
-# 1) HTTP (기본, LAN / 포트 80)
+# HTTPS belo.team — Caddy + Let's Encrypt (80/443 열려 있어야 함)
 curl -fsSL https://raw.githubusercontent.com/divelabkr/tibo/main/install.sh | bash
 
-# 2) HTTPS — Cloudflare Tunnel (가정용 PC 권장, 포트포워딩 불필요)
+# Caddy + Cloudflare Tunnel (토큰이 있으면 둘 다)
 curl -fsSL https://raw.githubusercontent.com/divelabkr/tibo/main/install.sh | bash -s -- --tunnel 'YOUR_TUNNEL_TOKEN'
-
-# 3) HTTPS — Caddy + Let's Encrypt (공인 도메인 + 80/443 포워딩 필요)
-curl -fsSL https://raw.githubusercontent.com/divelabkr/tibo/main/install.sh | bash -s -- --caddy example.com you@example.com
 ```
 
-설치 위치 기본값: `~/tibo`
+이미 설치한 경우:
+
+```bash
+cd ~/tibo
+git pull
+cp .env.example .env   # TIBO_DOMAIN=belo.team 확인
+docker compose --env-file .env -f docker-compose.yml -f docker-compose.caddy.yml up -d
+```
+
+### Cloudflare DNS
+
+| 레코드 | 이름 | 대상 |
+|--------|------|------|
+| A      | `@`  | 서버 공인 IP (Caddy 사용 시) |
+| A 또는 CNAME | `www` | `@` 또는 서버 IP |
+| Tunnel | `belo.team`, `www.belo.team` | `http://tibo:80` |
+
+- 네임서버는 Cloudflare 로 위임
+- 오렌지 클라우드(프록시)면 SSL/TLS 모드 **Full**
+- Tunnel만 쓰면 A 레코드 대신 대시보드 Public hostname
 
 ## 자동 빌드 → 자동 배포
 
-1. `main` 에 push → GitHub Actions가 Docker 이미지 빌드
-2. `ghcr.io/divelabkr/tibo:latest` 로 푸시
-3. 서버의 **Watchtower**가 새 이미지를 감지하고 컨테이너를 재시작
+1. `main` push → GitHub Actions가 `ghcr.io/divelabkr/tibo:latest` 빌드
+2. Watchtower가 서버 컨테이너를 갱신
+3. Caddy가 `belo.team` / `www.belo.team` 인증서 유지
 
-첫 이미지 빌드 후 GHCR 패키지가 private이면  
-GitHub → Packages → `tibo` → Package settings → Change visibility → **Public**  
-또는 서버에서 `docker login ghcr.io` 후 사용.
+GHCR 패키지가 private이면 Packages → `tibo` → Public.
 
-## Compose 직접 실행
+## Compose
 
 ```bash
-git clone https://github.com/divelabkr/tibo.git
-cd tibo
-cp .env.example .env
+# HTTPS (belo.team)
+docker compose --env-file .env -f docker-compose.yml -f docker-compose.caddy.yml up -d
 
-# HTTP
-docker compose -f docker-compose.yml -f docker-compose.http.yml up -d
-
-# Caddy HTTPS
-# .env 에 TIBO_DOMAIN, CADDY_EMAIL
-docker compose -f docker-compose.yml -f docker-compose.caddy.yml up -d
-
-# Cloudflare Tunnel
-# .env 에 CLOUDFLARE_TUNNEL_TOKEN
-# 대시보드 Public hostname → http://tibo:80
-docker compose -f docker-compose.yml -f docker-compose.tunnel.yml up -d
+# + Cloudflare Tunnel
+docker compose --env-file .env -f docker-compose.yml -f docker-compose.caddy.yml -f docker-compose.tunnel.yml up -d
 ```
-
-## 로컬에서 이미지 빌드
-
-```bash
-docker build -t tibo-pls .
-docker run -d --name tibo-pls -p 80:80 tibo-pls
-```
-
-## Cloudflare Tunnel 설정 요약
-
-1. [Cloudflare Zero Trust](https://one.dash.cloudflare.com/) → Networks → Tunnels → Create
-2. Docker 설치 방식 선택 후 **토큰** 복사
-3. Public Hostname 추가: 서비스 URL `http://tibo:80`
-4. `./install.sh --tunnel '<토큰>'`
-
-## 폴더 구조
-
-```
-├── index.html
-├── robots.txt
-├── web.config                 # IIS용 (Docker에서는 사용 안 함)
-├── assets/
-├── Dockerfile
-├── nginx.conf
-├── docker-compose.yml         # tibo + watchtower
-├── docker-compose.http.yml
-├── docker-compose.caddy.yml
-├── docker-compose.tunnel.yml
-├── Caddyfile
-├── install.sh
-├── .env.example
-└── .github/workflows/docker.yml
-```
-
-## 보안 헤더
-
-nginx에 포함:
-
-- Content-Security-Policy (엄격)
-- X-Frame-Options: DENY
-- X-Content-Type-Options: nosniff
-- Referrer-Policy: no-referrer
-- X-Robots-Tag: noindex, nofollow
 
 ## 라이선스 / 고지
 

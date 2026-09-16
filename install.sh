@@ -1,33 +1,30 @@
 #!/usr/bin/env bash
-# TIBO, PLS. — 한 번에 설치 / 실행
-# 사용:
+# TIBO, PLS. — belo.team 배포
+# 기본: Caddy HTTPS for belo.team
 #   curl -fsSL https://raw.githubusercontent.com/divelabkr/tibo/main/install.sh | bash
-#   ./install.sh --http
-#   ./install.sh --caddy example.com you@example.com
+# Cloudflare Tunnel 까지:
 #   ./install.sh --tunnel '<CLOUDFLARE_TUNNEL_TOKEN>'
 set -euo pipefail
 
 REPO_URL="${TIBO_REPO_URL:-https://github.com/divelabkr/tibo.git}"
 INSTALL_DIR="${TIBO_DIR:-$HOME/tibo}"
 IMAGE="${TIBO_IMAGE:-ghcr.io/divelabkr/tibo:latest}"
-MODE="http"
-DOMAIN=""
-EMAIL=""
-TUNNEL_TOKEN=""
+MODE="caddy"
+DOMAIN="${TIBO_DOMAIN:-belo.team}"
+EMAIL="${CADDY_EMAIL:-admin@belo.team}"
+TUNNEL_TOKEN="${CLOUDFLARE_TUNNEL_TOKEN:-}"
 HTTP_PORT="${HTTP_PORT:-80}"
 
 usage() {
   cat <<'EOF'
 Usage:
-  ./install.sh [--http] [--port 80]
-  ./install.sh --caddy <domain> [email]
-  ./install.sh --tunnel '<cloudflare-tunnel-token>'
+  ./install.sh                         # HTTPS belo.team (Caddy)
+  ./install.sh --http [--port 80]
+  ./install.sh --caddy [domain] [email]
+  ./install.sh --tunnel '<token>'      # Caddy + Cloudflare Tunnel
   ./install.sh --dir ~/tibo
 
-Modes:
-  --http     HTTP only (default). LAN or port 80.
-  --caddy    HTTPS with Let's Encrypt. Needs public domain + 80/443.
-  --tunnel   HTTPS with Cloudflare Tunnel. No port forwarding.
+Default domain: belo.team
 EOF
 }
 
@@ -36,20 +33,18 @@ while [[ $# -gt 0 ]]; do
     --http) MODE="http"; shift ;;
     --caddy)
       MODE="caddy"
-      DOMAIN="${2:-}"
-      EMAIL="${3:-}"
-      if [[ -z "$DOMAIN" ]]; then
-        echo "error: --caddy needs a domain" >&2
-        exit 1
+      shift
+      if [[ $# -gt 0 && "$1" != --* ]]; then
+        DOMAIN="$1"
+        shift
       fi
-      shift 2
       if [[ $# -gt 0 && "$1" != --* ]]; then
         EMAIL="$1"
         shift
       fi
       ;;
     --tunnel)
-      MODE="tunnel"
+      MODE="prod"
       TUNNEL_TOKEN="${2:-}"
       if [[ -z "$TUNNEL_TOKEN" ]]; then
         echo "error: --tunnel needs a Cloudflare tunnel token" >&2
@@ -57,6 +52,7 @@ while [[ $# -gt 0 ]]; do
       fi
       shift 2
       ;;
+    --prod) MODE="caddy"; shift ;;
     --dir) INSTALL_DIR="$2"; shift 2 ;;
     --port) HTTP_PORT="$2"; shift 2 ;;
     -h|--help) usage; exit 0 ;;
@@ -107,30 +103,39 @@ CADDY_EMAIL=$EMAIL
 CLOUDFLARE_TUNNEL_TOKEN=$TUNNEL_TOKEN
 EOF
 
-COMPOSE=(docker compose -f docker-compose.yml)
+COMPOSE=(docker compose --env-file "$ENV_FILE" -f docker-compose.yml)
 case "$MODE" in
   http)   COMPOSE+=(-f docker-compose.http.yml) ;;
   caddy)  COMPOSE+=(-f docker-compose.caddy.yml) ;;
+  prod)
+    COMPOSE+=(-f docker-compose.caddy.yml)
+    COMPOSE+=(-f docker-compose.tunnel.yml)
+    ;;
   tunnel) COMPOSE+=(-f docker-compose.tunnel.yml) ;;
 esac
 
 echo "Pulling images..."
 "${COMPOSE[@]}" pull
 
-echo "Starting ($MODE)..."
+echo "Starting ($MODE) for ${DOMAIN}..."
 "${COMPOSE[@]}" up -d --remove-orphans
 
 echo
-echo "TIBO is running."
+echo "TIBO is running on ${DOMAIN}."
 case "$MODE" in
   http)
     echo "Open http://localhost:${HTTP_PORT}  or  http://<server-ip>:${HTTP_PORT}"
     ;;
   caddy)
+    echo "Open https://${DOMAIN}  and  https://www.${DOMAIN}"
+    echo "Cloudflare DNS: A 레코드가 이 서버 IP 를 가리켜야 합니다. SSL 모드는 Full."
+    ;;
+  prod)
     echo "Open https://${DOMAIN}"
+    echo "Cloudflare Tunnel Public hostname: ${DOMAIN} / www.${DOMAIN} → http://tibo:80"
     ;;
   tunnel)
-    echo "Cloudflare 대시보드에서 Public hostname 을 http://tibo:80 으로 연결하세요."
+    echo "Cloudflare Public hostname: ${DOMAIN} / www.${DOMAIN} → http://tibo:80"
     ;;
 esac
-echo "Watchtower 가 약 ${WATCHTOWER_POLL_INTERVAL:-300}초마다 새 이미지를 확인하고 자동 재시작합니다."
+echo "Watchtower 가 약 300초마다 새 이미지를 확인하고 자동 재시작합니다."

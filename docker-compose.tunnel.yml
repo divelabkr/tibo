@@ -1,6 +1,7 @@
-# HTTPS via Cloudflare Tunnel — 포트포워딩 불필요 (가정용 PC 서버 권장)
-# Cloudflare Zero Trust에서 터널 만들고 토큰을 CLOUDFLARE_TUNNEL_TOKEN 에 넣기
-# Public hostname 대상: http://tibo:80
+# HTTPS via Cloudflare Tunnel — belo.team (포트포워딩 불필요)
+# 대시보드 Public hostname:
+#   belo.team      → http://tibo:80
+#   www.belo.team  → http://tibo:80
 # docker compose -f docker-compose.yml -f docker-compose.tunnel.yml up -d
 services:
   tibo:

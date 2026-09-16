@@ -1,6 +1,6 @@
-# HTTPS via Caddy (Let's Encrypt)
-# 필요: 공인 도메인 + 80/443 포트 포워딩
-# TIBO_DOMAIN=example.com CADDY_EMAIL=you@example.com
+# HTTPS via Caddy (Let's Encrypt) — belo.team / www.belo.team
+# 필요: 도메인이 이 서버 공인 IP 를 가리키고 80/443 이 열려 있어야 함
+# Cloudflare 오렌지 클라우드(프록시)면 SSL 모드는 Full
 # docker compose -f docker-compose.yml -f docker-compose.caddy.yml up -d
 services:
   tibo:
@@ -18,8 +18,8 @@ services:
       - "443:443"
       - "443:443/udp"
     environment:
-      TIBO_DOMAIN: ${TIBO_DOMAIN:?TIBO_DOMAIN is required}
-      CADDY_EMAIL: ${CADDY_EMAIL:-}
+      TIBO_DOMAIN: ${TIBO_DOMAIN:-belo.team}
+      CADDY_EMAIL: ${CADDY_EMAIL:-admin@belo.team}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data

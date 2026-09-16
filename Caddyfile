@@ -2,7 +2,7 @@
 	email {$CADDY_EMAIL}
 }
 
-{$TIBO_DOMAIN} {
+belo.team, www.belo.team {
 	encode gzip
 	reverse_proxy tibo:80
 	header {

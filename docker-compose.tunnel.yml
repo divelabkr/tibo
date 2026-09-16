@@ -1,0 +1,20 @@
+# HTTPS via Cloudflare Tunnel — 포트포워딩 불필요 (가정용 PC 서버 권장)
+# Cloudflare Zero Trust에서 터널 만들고 토큰을 CLOUDFLARE_TUNNEL_TOKEN 에 넣기
+# Public hostname 대상: http://tibo:80
+# docker compose -f docker-compose.yml -f docker-compose.tunnel.yml up -d
+services:
+  tibo:
+    expose:
+      - "80"
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: tibo-tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN:?CLOUDFLARE_TUNNEL_TOKEN is required}
+    depends_on:
+      - tibo

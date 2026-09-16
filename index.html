@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<!-- Security policy is generated from the exact built script bytes. -->
+<meta http-equiv="Content-Security-Policy" content="default-src &#x27;none&#x27;; script-src &#x27;self&#x27;; script-src-attr &#x27;none&#x27;; style-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;; img-src &#x27;self&#x27; data:; connect-src &#x27;self&#x27;; font-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="#0b152a" name="theme-color"/>
+<meta content="토큰은 바닥났지만, 마음은 가득합니다. 하트와 큰절을 보내는 비공식 팬 광장. 현재는 서버에 연결되지 않은 로컬 데모입니다." name="description"/>
+<title>TIBO, PLS. — 성 티보의 리셋 기원 광장</title>
+<link href="assets/favicon.7d4ba3a7bcfd621d.svg" rel="icon" type="image/svg+xml"/>
+<link rel="stylesheet" href="assets/styles.0b5168b0e7283337.css" integrity="sha384-t/Z4pUhh31ZXae/RDdt1Gkt1s+osYC8CY1iyj25Hu8ozMEO57xSY4dky3mjKvtj3" crossorigin="anonymous">
+</head>
+<body>
+<div aria-hidden="true" hidden="">
+<img alt="" height="1024" id="pixelAtlas" src="assets/pixel-atlas.8a8645a9dacd8b8c.png" width="512"/>
+<img alt="" height="64" id="pixelAvatars" src="assets/pixel-avatars.e766275700d7b101.png" width="512"/>
+</div>
+<a class="skip-link" data-i18n="skip" href="#actions">하트·큰절 버튼으로 이동</a>
+<noscript><div class="noscript" lang="ko">이 파일의 버튼과 채팅 체험에는 JavaScript가 필요합니다. 파일을 다운로드한 뒤 브라우저에서 열어주세요.</div></noscript>
+<div class="page-shell">
+<header class="site-header">
+<div class="brand"><div class="brand-title" dir="ltr" lang="en">TIBO, PLS.<span>♥</span></div><div class="brand-sub" data-i18n="brand">코덱스 유저들의 리셋 기원 광장</div></div>
+<nav aria-label="광장 도구" class="header-tools" data-i18n-aria="toolsLabel">
+<button class="tool-button signal-tool" id="signalButton" type="button"><span aria-hidden="true">𝕏</span><span data-i18n="newsTool">X 연출</span></button>
+<button class="tool-button active" id="aboutButton" type="button"><span aria-hidden="true">ⓘ</span><span data-i18n="about">안내</span></button>
+<button aria-pressed="false" class="tool-button" id="motionButton" type="button"><span aria-hidden="true">◐</span><span id="motionLabel">움직임 끄기</span></button>
+</nav>
+<div aria-label="이 파일의 로컬 클릭 및 연출용 캐릭터 집계" class="stats-row" data-i18n-aria="statsLabel">
+<div class="stat-card"><span aria-hidden="true" class="stat-icon pink">♥</span><div><strong id="heartCount">0</strong><span class="stat-label" data-i18n="hearts">보낸 하트</span></div></div>
+<div class="stat-card"><span aria-hidden="true" class="stat-icon bow-icon">🙇</span><div><strong id="bowCount">0</strong><span class="stat-label" data-i18n="bows">올린 큰절</span></div></div>
+<div class="stat-card"><span aria-hidden="true" class="stat-icon people-icon">♟♟</span><div><strong id="onlineCount" title="클릭에 따른 연출 캐릭터 수이며, 실제 접속자 수가 아닙니다.">5</strong><span class="stat-label" data-i18n="characters">기원 캐릭터</span></div></div>
+</div>
+</header><div class="locale-bar"><div class="locale-control"><label data-i18n="language" for="languageSelect">Language</label><select aria-describedby="localeStatus" id="languageSelect"></select></div><span aria-live="polite" id="localeStatus" role="status"></span></div>
+<div class="demo-notice" id="demoNotice"><span class="demo-pill" data-i18n="demo">LOCAL DEMO</span><p data-i18n="demoNotice">클릭이 쌓이면 함께 절하는 캐릭터가 늘어납니다. X 상태도 연출용이며, 실시간 소식은 아직 연결하지 않았어요.</p><span class="offline-note"><i></i><span data-i18n="noServer">No live server</span></span></div><div class="load-alert" hidden="" id="loadAlert" role="alert"><span id="loadErrorText"></span><button id="retryLoad" type="button" data-i18n="retryLoad">다시 불러오기</button></div><p class="loading-status" id="loadingStatus" role="status" data-i18n="loading">광장을 불러오는 중…</p>
+<main class="main-grid" id="main">
+<section aria-labelledby="heroTitle" class="plaza-panel" id="plazaPanel">
+<div class="scene" id="scene">
+<div aria-hidden="true" class="stars"></div>
+<img alt="" aria-hidden="true" class="city city-left" height="265" src="assets/city-left.4ecef6ff1c4dd585.webp" width="338"/>
+<img alt="" aria-hidden="true" class="city city-right" height="279" src="assets/city-right.4d8caaa0075e77ef.webp" width="276"/>
+<div aria-hidden="true" class="moon"></div>
+<div class="hero-copy"><h1 id="heroTitle"><span data-i18n="hero">Saint Tibo, one more.</span><span aria-hidden="true" class="hero-heart"> ♥</span></h1><p class="lead" data-i18n="lead">토큰은 바닥났고, 이제 남은 건 기도뿐.</p><p class="sublead"><button class="signal-hero-chip" id="signalHeroButton" type="button"><i aria-hidden="true"></i><span id="signalHeroText">확률 미정 · 정성은 진심</span><span class="chip-demo" id="signalHeroBadge">DEMO</span></button></p></div>
+<img alt="" aria-hidden="true" class="paving" height="470" src="assets/paving.4acea09928d4b97d.svg" width="1000"/>
+<div class="centerpiece saint-center" id="centerpiece">
+<div aria-hidden="true" class="saint-aura"></div>
+<div aria-hidden="true" class="saint-rays"></div>
+<div aria-hidden="true" class="saint-halo"><span>✦</span><span>✧</span><span>✦</span></div>
+<div class="portrait-frame saint-figure"><img alt="후광 앞에 앉아 있는 픽셀 티보와 작은 고양이. 생성된 비공식 팬아트입니다." data-i18n-alt="portraitAlt" height="303" decoding="async" fetchpriority="high" id="portrait" src="assets/saint-tibo.8c1ec670996efc0d.png" width="220"/></div>
+<div aria-hidden="true" class="portrait-sparks"><span>♥</span><span>♥</span><span>♡</span><span>♥</span><span>✦</span><span>✦</span></div>
+<div class="plaque saint-plaque"><span class="saint-prefix" dir="ltr" lang="en">PATRON SAINT OF ONE MORE RESET</span><strong dir="ltr" lang="en">SAINT TIBO</strong><span data-i18n="plaque">리셋의 성인 · 비공식 팬아트</span></div>
+</div>
+<div aria-hidden="true" class="grateful-note" data-i18n="note">성 티보여,<br/>토큰을… <span>♡</span></div>
+<div aria-hidden="true" class="speech-layer" id="speechLayer"></div>
+<div aria-hidden="true" class="lantern lantern-left"></div><div aria-hidden="true" class="lantern lantern-right"></div>
+<canvas aria-label="픽셀 캐릭터 광장. 하트나 큰절 클릭이 쌓이면 중앙 가까운 자리부터 함께 절하는 동료가 늘어납니다. 캐릭터 수는 클릭 연출이며 실제 접속자 수가 아닙니다." data-i18n-aria="canvasLabel" id="plazaCanvas" role="img"></canvas>
+<div class="action-row" id="actions" tabindex="-1">
+<button class="action-button heart-button" disabled="" id="sendHeart" type="button"><span aria-hidden="true" class="symbol">♥</span><span><strong data-i18n="heart">하트 보내기</strong><small data-i18n="heartHint">마음을 전해요</small></span></button>
+<button class="action-button bow-button" disabled="" id="sendBow" type="button"><span aria-hidden="true" class="symbol bow-symbol">🙇</span><span><strong data-i18n="bow">큰절 올리기</strong><small data-i18n="bowHint">정성을 다해요</small></span></button>
+</div>
+<div class="scene-footnote ritual-footnote">
+<span id="growthSummary">기원 0회 · 새 동료까지 1회</span>
+<progress aria-label="다음 큰절 동료까지 진행도" id="growthMeter" max="1" value="0"></progress>
+</div>
+<span aria-live="polite" class="sr-only" id="actionStatus" role="status"></span>
+</div>
+<div class="fx-controls"><label for="effectsQuality" data-i18n="fxLabel">빛 연출</label><select id="effectsQuality" aria-describedby="effectsStatus"><option value="auto" data-i18n="fxAuto">자동</option><option value="rich" data-i18n="fxRich">풍성하게</option><option value="soft" data-i18n="fxSoft">가볍게</option><option value="off" data-i18n="fxOff">조명 정지</option></select><span id="effectsStatus" role="status" aria-live="polite"></span></div>
+<section class="reset-panel" aria-labelledby="resetTitle" id="resetDayPanel">
+  <div class="reset-panel-head"><div><small id="resetProvider"></small><h2 id="resetTitle" role="status" aria-live="polite"></h2></div><button id="resetPreview" type="button" aria-pressed="false"></button></div>
+  <p id="resetNote"></p>
+  <details id="resetDetails" hidden><summary data-i18n="reset.details">리셋 시점과 근거</summary><p id="resetSummary"></p><dl>
+    <dt data-i18n="reset.effectiveLabel"></dt><dd id="resetEffective"></dd>
+    <dt data-i18n="reset.localLabel"></dt><dd id="resetLocal"></dd>
+    <dt data-i18n="reset.publishedLabel"></dt><dd id="resetPublished"></dd>
+    <dt data-i18n="reset.approvedLabel"></dt><dd id="resetApproved"></dd>
+    <dt data-i18n="reset.checkedLabel"></dt><dd id="resetChecked"></dd>
+    <dt data-i18n="reset.scopeLabel"></dt><dd id="resetAudience"></dd>
+    <dt data-i18n="reset.kindLabel"></dt><dd id="resetKind"></dd>
+    <dt data-i18n="reset.endLabel"></dt><dd id="resetEnd"></dd>
+  </dl><a id="resetSource" target="_blank" rel="noopener noreferrer" hidden></a></details>
+</section>
+<section aria-labelledby="readWish" class="wish-reader"><button data-i18n="readWish" id="readWish" type="button">Show a wish</button><p aria-live="polite" data-i18n-aria="wishLabel" id="wishText" role="status"></p></section><button aria-controls="chatPanel" aria-expanded="false" class="mobile-chat-toggle" id="openChat" type="button"><span aria-hidden="true">☏</span><span data-i18n="chat">Waiting room</span><span class="mobile-demo" data-i18n="demo">DEMO</span></button>
+</section>
+<aside aria-label="리셋 대기실 로컬 데모" class="chat-panel" data-i18n-aria="chat" id="chatPanel">
+<div class="chat-head"><h2><span aria-hidden="true">♧</span><span data-i18n="chat">Waiting room</span></h2><span class="chat-demo" data-i18n="sampleChat">샘플 대화</span><button aria-label="채팅 닫기" class="close-chat icon-button" data-i18n-aria="close" id="closeChat" type="button">×</button></div>
+<section aria-labelledby="signalCardTitle" class="notice-card signal-card">
+<div class="signal-eyebrow"><strong data-i18n="newsTitle" id="signalCardTitle">𝕏 리셋 소식</strong><span id="signalBadge">DEMO · X 미연결</span></div>
+<div class="signal-name"><span aria-hidden="true" id="signalIcon">☾</span><h3 id="signalLabel">소식 미확인</h3></div>
+<p class="signal-caption" id="signalCaption">오늘도 기도는 정상 영업.</p>
+<p class="signal-description" id="signalDescription">아직 승인된 최신 리셋 소식을 연결하지 않았습니다.</p>
+<div class="signal-source" hidden="" id="signalSource"><a id="signalSourceLink" rel="noopener noreferrer" target="_blank">원문 보기 ↗</a><span id="signalSourceTime"></span><span id="signalAudience"></span></div>
+<div class="signal-card-bottom"><small data-i18n="fiction">실제 확률 아님 · 말풍선은 창작</small><button data-i18n="changeMood" id="signalPanelButton" type="button">연출 바꾸기 ↗</button></div>
+</section>
+<div aria-label="샘플 채팅 메시지" aria-live="polite" aria-relevant="additions" class="chat-list" data-i18n-aria="sampleChat" id="chatList" role="log" tabindex="0"></div>
+<div class="chat-starter"><span data-i18n="buildPrompt">리셋되면 저는…</span><div><button class="wish-chip" data-i18n="ship" data-wish="리셋되면 첫 앱을 배포할 거예요!" type="button">첫 앱 배포 🚀</button><button class="wish-chip" data-i18n="bug" data-wish="리셋되면 그 버그를 잡을 거예요!" type="button">버그 잡기 🐛</button></div></div>
+<form class="chat-form" id="chatForm"><label class="sr-only" data-i18n="chatLabel" for="chatInput">로컬 데모 메시지</label><div class="chat-input-wrap"><input aria-describedby="chatStatus charCount draftHint" autocomplete="off" data-i18n-placeholder="placeholder" dir="auto" id="chatInput" maxlength="4096" name="message" placeholder="메시지를 입력하세요…" type="text"/><button aria-label="데모 메시지 보내기" data-i18n-aria="send" id="chatSend" type="submit">➤</button></div><div class="input-meta"><span id="chatStatus" role="status">로컬 체험 · 메시지는 서버에 저장되지 않아요.</span><span id="charCount">0/160</span></div><div class="draft-tools"><small id="draftHint" data-i18n="draftHint"></small><button id="clearDraft" type="button" data-i18n="clearDraft">초안 지우기</button></div></form>
+</aside>
+</main>
+<footer class="site-footer"><div><strong>TIBO, PLS.</strong><p data-i18n="disclaimer">비공식 팬 프로젝트 · OpenAI와 제휴 관계가 아닙니다.<br/>하트·큰절은 실제 사용량 리셋과 무관합니다.</p></div><span><span data-i18n="fictionFooter"></span><b aria-hidden="true"> ♥</b></span></footer>
+</div>
+<div class="chat-backdrop" hidden="" id="chatBackdrop"></div>
+<dialog aria-labelledby="aboutTitle" id="aboutDialog"><button aria-label="안내 닫기" class="dialog-close icon-button" data-i18n-aria="close" id="closeAbout" type="button">×</button><span class="dialog-eyebrow" dir="ltr" lang="en">TIBO, PLS. / LOCAL DEMO</span><h2 data-i18n="aboutTitle" id="aboutTitle">작은 기원이지,<br/>진짜 리셋 버튼은 아니에요.</h2><p data-i18n="aboutBody">하트와 큰절을 보내며 함께 웃는 비공식 팬 광장의 화면 시안입니다. 기본 동료 4명과 내 캐릭터에서 시작합니다. 하트·큰절 합계 1, 3, 6, 10, 15회…마다 절하는 동료가 한 명씩 합류합니다. 캐릭터는 기원을 표현한 연출이지 실제 접속자 수가 아닙니다. 대화 역시 샘플이며 다른 사람에게 전송되지 않습니다.</p><div class="dialog-note" data-i18n="aboutSafety">중앙 캐릭터는 생성된 비공식 팬아트입니다. 인물의 실제 발언·지지나 종교적 지위를 뜻하지 않습니다. X 소식과 말풍선을 구분하며, 말풍선은 모두 창작입니다. 공개 전 이미지와 문구를 검토해주세요.</div><p data-i18n="aboutPrivacy">말풍선은 X 소식 상태별로 정해둔 창작 문구에서 랜덤으로 나타납니다. X 연출 메뉴로 소식 미확인·커뮤니티 기대·공식 예고·리셋 공지·지연을 체험할 수 있습니다. 이는 실제 X 조회가 아닙니다. 움직임을 끄면 자동 말풍선도 멈춥니다. 새로고침하면 로컬 클릭은 0부터 다시 시작합니다.
+이 HTML은 스타일·스크립트·이미지를 모두 포함합니다. 서버 연결·공용 집계·신고·운영자 기능은 Codex에서 별도로 구현해야 합니다.</p><button class="primary-button" data-i18n="back" id="backToPlaza" type="button">광장으로 돌아가기</button></dialog>
+<dialog aria-labelledby="signalDialogTitle" id="signalDialog">
+<button aria-label="X 연출 닫기" class="dialog-close icon-button" data-i18n-aria="close" id="closeSignal" type="button">×</button>
+<span class="dialog-eyebrow" dir="ltr" lang="en">𝕏 SIGNAL / LOCAL PREVIEW</span>
+<h2 data-i18n="signalTitle" id="signalDialogTitle">소식이 바뀌면,<br/>기도의 말투도 바뀝니다.</h2>
+<p data-i18n="signalIntro">이 선택은 내 화면에서만 적용되는 <strong>연출 테스트</strong>입니다. 실제 X 게시물을 읽거나 리셋 확률을 계산하지 않습니다.</p>
+<label class="signal-select-label" data-i18n="signalState" for="signalSelect">연출 상태</label>
+<select id="signalSelect">
+<option data-i18n="state.unknown.label" value="unknown">☾ 소식 미확인 — 정성으로 버티는 중</option>
+<option data-i18n="state.buzz.label" value="buzz">♡ 커뮤니티 기대 — 타임라인만 들썩</option>
+<option data-i18n="state.hint.label" value="hint">✦ 공식 예고 — 희망회로 가동</option>
+<option data-i18n="state.confirmed.label" value="confirmed">♥ 리셋 공지 — 감사의 큰절</option>
+<option data-i18n="state.delayed.label" value="delayed">… 지연·보류 — 기도 연장전</option>
+</select>
+<div class="signal-example"><small data-i18n="example">유저 말풍선 예시 · 실제 인용 아님</small><p id="signalExample">확률은 몰라도 큰절은 확실하다.</p></div>
+<div class="dialog-note" data-i18n="signalSafety">실서비스에서는 원문·작성자·게시 시점·적용 대상을 확인하고, 운영자가 승인한 소식만 반영합니다. 클릭 수로 뉴스 상태가 바뀌지는 않습니다.</div>
+<button class="primary-button" data-i18n="applyMood" id="applySignal" type="button">이 분위기로 기원하기</button>
+</dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="assets/app.fb335c0b2c0a265b.js" integrity="sha384-Zg7HGQTC2CbEWWNFcsqHWWnwBiG+NgDqV8rvA9VsrB/59bD15g58jSkZzzSGQBJB" crossorigin="anonymous"></script>
+</body>
+</html>

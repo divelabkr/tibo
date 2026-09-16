@@ -1,0 +1,32 @@
+# HTTPS via Caddy (Let's Encrypt)
+# 필요: 공인 도메인 + 80/443 포트 포워딩
+# TIBO_DOMAIN=example.com CADDY_EMAIL=you@example.com
+# docker compose -f docker-compose.yml -f docker-compose.caddy.yml up -d
+services:
+  tibo:
+    expose:
+      - "80"
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: tibo-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      TIBO_DOMAIN: ${TIBO_DOMAIN:?TIBO_DOMAIN is required}
+      CADDY_EMAIL: ${CADDY_EMAIL:-}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - tibo
+
+volumes:
+  caddy_data:
+  caddy_config:

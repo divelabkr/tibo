@@ -1,0 +1,10 @@
+.git
+.github
+*.md
+*.zip
+.env
+.env.*
+docker-compose*.yml
+Caddyfile
+install.sh
+web.config

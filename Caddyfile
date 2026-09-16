@@ -1,0 +1,13 @@
+{
+	email {$CADDY_EMAIL}
+}
+
+{$TIBO_DOMAIN} {
+	encode gzip
+	reverse_proxy tibo:80
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy no-referrer
+		X-Robots-Tag "noindex, nofollow"
+	}
+}
